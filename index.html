@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreeTure League - Dota 2 Tournament</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        /* Тот же самый CSS код что я тебе дал ранее */
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #0f3460;
+            --highlight: #e94560;
+            --text: #ffffff;
+            --text-secondary: #b0b0b0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--primary);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+        
+        /* ... весь остальной CSS код ... */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">FT</div>
+                <div class="logo-text">FreeTure League</div>
+            </div>
+            <nav>
+                <div class="nav-item active" data-section="teams">Команды</div>
+                <div class="nav-item" data-section="profile">Игроки</div>
+                <div class="nav-item" data-section="bracket">Сетка</div>
+            </nav>
+        </header>
+        
+        <main>
+            <!-- Секция команд -->
+            <section id="teams" class="section active">
+                <h2 class="section-title">
+                    <i>🏆</i> Команды турнира
+                </h2>
+                
+                <div class="teams-container">
+                    <div class="teams-slider">
+                        <!-- Команда 1 -->
+                        <div class="team-card">
+                            <div class="team-header">
+                                <div class="team-logo">TS</div>
+                                <div class="team-info">
+                                    <div class="team-name">Team Spirit</div>
+                                    <div class="team-mmr">Средний MMR: 9,850</div>
+                                    <div class="team-titles">
+                                        <div class="title-badge">TI 2021</div>
+                                        <div class="title-badge">RIYADH 2023</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="team-social">
+                                <div class="social-icon">T</div>
+                                <div class="social-icon">D</div>
+                                <div class="social-icon">V</div>
+                            </div>
+                            
+                            <div class="team-players">
+                                <div class="players-title">Состав:</div>
+                                <div class="players-list">
+                                    <div class="player-item">
+                                        <div class="player-avatar"></div>
+                                        <div class="player-name">Yatoro</div>
+                                    </div>
+                                    <div class="player-item">
+                                        <div class="player-avatar"></div>
+                                        <div class="player-name">Larl</div>
+                                    </div>
+                                    <div class="player-item">
+                                        <div class="player-avatar"></div>
+                                        <div class="player-name">Collapse</div>
+                                    </div>
+                                    <div class="player-item">
+                                        <div class="player-avatar"></div>
+                                        <div class="player-name">Mira</div>
+                                    </div>
+                                    <div class="player-item">
+                                        <div class="player-avatar"></div>
+                                        <div class="player-name">Miposhka</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Добавь остальные команды из предыдущего кода -->
+                    </div>
+                    
+                    <div class="slider-controls">
+                        <div class="slider-btn prev-btn">←</div>
+                        <div class="slider-btn next-btn">→</div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Добавь остальные секции из предыдущего кода -->
+        </main>
+    </div>
+
+    <script>
+        // Инициализация Telegram Web App
+        let tg = window.Telegram.WebApp;
+        
+        // Расширяем на весь экран
+        tg.expand();
+        
+        // Включаем подтверждение закрытия
+        tg.enableClosingConfirmation();
+        
+        // Меняем цвет заголовка под тему Telegram
+        tg.setHeaderColor('#16213e');
+        tg.setBackgroundColor('#1a1a2e');
+        
+        // Показываем основную кнопку (если нужна)
+        tg.MainButton.setText('Открыть турнир');
+        tg.MainButton.show();
+        
+        // Обработчик основной кнопки
+        tg.MainButton.onClick(function() {
+            tg.showAlert('Добро пожаловать в FreeTure League!');
+        });
+
+        // Навигация между разделами
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(nav => {
+                    nav.classList.remove('active');
+                });
+                
+                this.classList.add('active');
+                
+                document.querySelectorAll('.section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                const sectionId = this.getAttribute('data-section');
+                document.getElementById(sectionId).classList.add('active');
+            });
+        });
+        
+        // Слайдер команд
+        const slider = document.querySelector('.teams-slider');
+        const prevBtn = document.querySelector('.prev-btn');
+        const nextBtn = document.querySelector('.next-btn');
+        const teamCards = document.querySelectorAll('.team-card');
+        let currentSlide = 0;
+        
+        function updateSlider() {
+            slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
+        
+        prevBtn.addEventListener('click', () => {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlider();
+            }
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            if (currentSlide < teamCards.length - 1) {
+                currentSlide++;
+                updateSlider();
+            }
+        });
+        
+        // Обработка свайпов
+        let startX = 0;
+        let endX = 0;
+        
+        slider.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+        });
+        
+        slider.addEventListener('touchend', (e) => {
+            endX = e.changedTouches[0].clientX;
+            handleSwipe();
+        });
+        
+        function handleSwipe() {
+            const diff = startX - endX;
+            
+            if (diff > 50 && currentSlide < teamCards.length - 1) {
+                currentSlide++;
+                updateSlider();
+            } else if (diff < -50 && currentSlide > 0) {
+                currentSlide--;
+                updateSlider();
+            }
+        }
+        
+        // Анимация появления элементов
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.team-card, .profile-section, .match').forEach((el, index) => {
+                el.classList.add('fade-in');
+                el.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
+</body>
+</html>
